@@ -1,12 +1,13 @@
 package es.ilerna.M0486.ra3.pt22.anotacions.jpa.domain;
 
-import javax.persistence.*; // Vehículo genérico, clase base de Car, Plane y Motorcycle 
+import javax.persistence.*;
 
+// Clase base para todos los vehículos
 @Entity
 @Table(name = "vehicle")
-@Inheritance(strategy = InheritanceType.JOINED) // Herencia con tablas separadas unidas por la misma id
-
+@Inheritance(strategy = InheritanceType.JOINED) // Herencia con tablas unidas por la misma id
 public abstract class Vehicle {
+
 	// Clave primaria de la tabla vehicle
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,9 +26,12 @@ public abstract class Vehicle {
 	@Column(name = "price")
 	private Float price;
 
-	// Muchos vehículos pueden pertenecer a una persona
+	// DUEÑO DEL VEHÍCULO (RELACIÓN MANY-TO-ONE CON PERSON)
 	@ManyToOne
-	@JoinColumn(name = "person_id") // Columna FK en vehicle que apunta a person.id private Person owner;
+	@JoinColumn(name = "person_id") // Columna FK en vehicle que apunta a person.id
+	private Person owner; // ← IMPORTANTE: este atributo debe existir
+
+	// ----------------- GETTERS Y SETTERS -----------------
 
 	public Integer getId() {
 		return id;
@@ -61,12 +65,15 @@ public abstract class Vehicle {
 		this.price = price;
 	}
 
-	// Dueño del vehículo (persona)
+	// Getter del dueño
 	public Person getOwner() {
 		return owner;
 	}
 
+	// Setter del dueño
 	public void setOwner(Person owner) {
+		// "this.owner" es el atributo de la clase
+		// "owner" es el parámetro del método
 		this.owner = owner;
 	}
 }
